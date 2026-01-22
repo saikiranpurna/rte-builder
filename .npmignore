@@ -1,0 +1,34 @@
+# Source files
+src/
+tsconfig.json
+tsup.config.ts
+
+# Documentation (keep only README in package)
+EXAMPLES.md
+QUICKSTART.md
+CHANGELOG.md
+
+# Development files
+.git/
+.gitignore
+node_modules/
+*.log
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Tests (if you add them later)
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml

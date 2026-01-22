@@ -1,0 +1,90 @@
+{
+  "name": "rte-builder",
+  "version": "1.0.0",
+  "description": "A feature-rich TipTap-based WYSIWYG editor for React with zero licensing costs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./styles.css": "./dist/index.css",
+    "./dist/index.css": "./dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "demo": "cd demo && npm run dev",
+    "demo:install": "cd demo && npm install",
+    "demo:build": "npm run build && cd demo && npm run build"
+  },
+  "keywords": [
+    "react",
+    "editor",
+    "wysiwyg",
+    "tiptap",
+    "rich-text",
+    "contenteditable"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "@tiptap/extension-blockquote": "^2.27.2",
+    "@tiptap/extension-bold": "^2.10.3",
+    "@tiptap/extension-bullet-list": "^2.10.3",
+    "@tiptap/extension-character-count": "^2.10.3",
+    "@tiptap/extension-code": "^2.10.3",
+    "@tiptap/extension-code-block-lowlight": "^2.10.3",
+    "@tiptap/extension-color": "^2.10.3",
+    "@tiptap/extension-document": "^2.10.3",
+    "@tiptap/extension-dropcursor": "^2.10.3",
+    "@tiptap/extension-font-family": "^2.10.3",
+    "@tiptap/extension-gapcursor": "^2.10.3",
+    "@tiptap/extension-hard-break": "^2.10.3",
+    "@tiptap/extension-heading": "^2.10.3",
+    "@tiptap/extension-highlight": "^2.10.3",
+    "@tiptap/extension-history": "^2.10.3",
+    "@tiptap/extension-horizontal-rule": "^2.10.3",
+    "@tiptap/extension-image": "^2.10.3",
+    "@tiptap/extension-italic": "^2.10.3",
+    "@tiptap/extension-link": "^2.10.3",
+    "@tiptap/extension-list-item": "^2.10.3",
+    "@tiptap/extension-ordered-list": "^2.10.3",
+    "@tiptap/extension-paragraph": "^2.10.3",
+    "@tiptap/extension-placeholder": "^2.10.3",
+    "@tiptap/extension-strike": "^2.10.3",
+    "@tiptap/extension-subscript": "^2.10.3",
+    "@tiptap/extension-superscript": "^2.10.3",
+    "@tiptap/extension-table": "^2.10.3",
+    "@tiptap/extension-table-cell": "^2.10.3",
+    "@tiptap/extension-table-header": "^2.10.3",
+    "@tiptap/extension-table-row": "^2.10.3",
+    "@tiptap/extension-text": "^2.10.3",
+    "@tiptap/extension-text-align": "^2.10.3",
+    "@tiptap/extension-text-style": "^2.10.3",
+    "@tiptap/extension-underline": "^2.10.3",
+    "@tiptap/pm": "^2.10.3",
+    "@tiptap/react": "^2.10.3",
+    "lowlight": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2"
+  }
+}
