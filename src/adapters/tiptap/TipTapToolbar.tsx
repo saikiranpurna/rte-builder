@@ -1,11 +1,17 @@
+/**
+ * TipTap Toolbar Component
+ *
+ * Toolbar implementation specific to TipTap editor.
+ */
+
 import React, { useState, useRef, useEffect } from 'react'
 import type { Editor } from '@tiptap/react'
-import type { ToolbarButton } from '../types'
-import { EMOJI_CATEGORIES } from '../extensions/Emoji'
+import type { ToolbarButtonType } from '../../core/types'
+import { EMOJI_CATEGORIES } from '../../extensions/Emoji'
 
-interface ToolbarProps {
+interface TipTapToolbarProps {
   editor: Editor | null
-  buttons: ToolbarButton[]
+  buttons: ToolbarButtonType[]
   onMediaPickerImage?: () => void
   onMediaPickerVideo?: () => void
 }
@@ -37,28 +43,7 @@ const LINE_HEIGHTS = [
   { value: '3', label: 'Triple' },
 ]
 
-const CODE_LANGUAGES = [
-  { value: 'javascript', label: 'JavaScript' },
-  { value: 'typescript', label: 'TypeScript' },
-  { value: 'python', label: 'Python' },
-  { value: 'java', label: 'Java' },
-  { value: 'cpp', label: 'C++' },
-  { value: 'csharp', label: 'C#' },
-  { value: 'php', label: 'PHP' },
-  { value: 'ruby', label: 'Ruby' },
-  { value: 'go', label: 'Go' },
-  { value: 'rust', label: 'Rust' },
-  { value: 'html', label: 'HTML' },
-  { value: 'css', label: 'CSS' },
-  { value: 'sql', label: 'SQL' },
-  { value: 'bash', label: 'Bash' },
-  { value: 'json', label: 'JSON' },
-  { value: 'yaml', label: 'YAML' },
-  { value: 'markdown', label: 'Markdown' },
-  { value: 'xml', label: 'XML' },
-]
-
-// Emoji Picker Popover Component
+// Emoji Picker Component
 const EmojiPicker: React.FC<{
   onSelect: (emoji: string) => void
   onClose: () => void
@@ -110,7 +95,12 @@ const EmojiPicker: React.FC<{
   )
 }
 
-export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPickerImage, onMediaPickerVideo }) => {
+export const TipTapToolbar: React.FC<TipTapToolbarProps> = ({
+  editor,
+  buttons,
+  onMediaPickerImage,
+  onMediaPickerVideo,
+}) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const emojiButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -122,7 +112,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPicker
     disabled = false,
     children,
     title,
-    buttonRef
+    buttonRef,
   }: {
     onClick: () => void
     active?: boolean
@@ -143,7 +133,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPicker
     </button>
   )
 
-  const renderButton = (button: ToolbarButton) => {
+  const renderButton = (button: ToolbarButtonType, index: number) => {
     switch (button) {
       case 'bold':
         return (
@@ -310,7 +300,11 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPicker
                 editor.chain().focus().setLineHeight(e.target.value).run()
               }
             }}
-            value={editor.getAttributes('paragraph').lineHeight || editor.getAttributes('heading').lineHeight || 'default'}
+            value={
+              editor.getAttributes('paragraph').lineHeight ||
+              editor.getAttributes('heading').lineHeight ||
+              'default'
+            }
             title="Line Height"
           >
             <option value="default">Line Height</option>
@@ -343,7 +337,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPicker
               ⬛
               <input
                 type="color"
-                onChange={(e) => editor.chain().focus().toggleHighlight({ color: e.target.value }).run()}
+                onChange={(e) =>
+                  editor.chain().focus().toggleHighlight({ color: e.target.value }).run()
+                }
                 value={editor.getAttributes('highlight').color || '#ffff00'}
               />
             </label>
@@ -558,7 +554,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPicker
         return (
           <ToolbarButton
             key="table"
-            onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+            onClick={() =>
+              editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
+            }
             title="Insert Table"
           >
             ⊞
@@ -634,16 +632,18 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor, buttons, onMediaPicker
         )
 
       case 'separator':
-        return <span key={`sep-${Math.random()}`} className="rte-builder-toolbar-separator">|</span>
+        return (
+          <span key={`sep-${index}`} className="rte-builder-toolbar-separator">
+            |
+          </span>
+        )
 
       default:
         return null
     }
   }
 
-  return (
-    <div className="rte-builder-toolbar">
-      {buttons.map(renderButton)}
-    </div>
-  )
+  return <div className="rte-builder-toolbar">{buttons.map(renderButton)}</div>
 }
+
+export default TipTapToolbar

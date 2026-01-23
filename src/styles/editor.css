@@ -535,3 +535,109 @@
 .rte-builder-content .hljs-strong {
   font-weight: bold;
 }
+
+/* ===== Fullscreen Mode ===== */
+.rte-builder-wrapper.rte-builder-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  border-radius: 0;
+  border: none;
+  background: #ffffff;
+}
+
+.rte-builder-wrapper.rte-builder-fullscreen .rte-builder-container {
+  height: calc(100vh - 100px) !important;
+  max-height: none;
+}
+
+.rte-builder-wrapper.rte-builder-fullscreen .rte-builder-toolbar {
+  border-radius: 0;
+}
+
+/* ===== Emoji Picker ===== */
+.rte-builder-emoji-picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  max-height: 350px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.rte-builder-emoji-categories {
+  display: flex;
+  gap: 2px;
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+  overflow-x: auto;
+}
+
+.rte-builder-emoji-category-btn {
+  padding: 6px 8px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.rte-builder-emoji-category-btn:hover {
+  background: #e5e7eb;
+}
+
+.rte-builder-emoji-category-btn.active {
+  background: #3b82f6;
+}
+
+.rte-builder-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  padding: 8px;
+  overflow-y: auto;
+  max-height: 280px;
+}
+
+.rte-builder-emoji-btn {
+  padding: 6px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rte-builder-emoji-btn:hover {
+  background: #e5e7eb;
+  transform: scale(1.2);
+}
+
+/* ===== Line Height Select (Smaller) ===== */
+.rte-builder-toolbar-select-sm {
+  min-width: 100px;
+}
+
+/* ===== Indentation Styles ===== */
+.rte-builder-content [style*="margin-left"] {
+  transition: margin-left 0.15s ease;
+}

@@ -1,3 +1,10 @@
+/**
+ * TipTap Editor Component
+ *
+ * This is the actual TipTap editor implementation that conforms
+ * to the adapter interface.
+ */
+
 import { useEffect, useImperativeHandle, forwardRef, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { Document } from "@tiptap/extension-document";
@@ -34,127 +41,32 @@ import { CharacterCount } from "@tiptap/extension-character-count";
 import { Gapcursor } from "@tiptap/extension-gapcursor";
 import { Dropcursor } from "@tiptap/extension-dropcursor";
 import { HardBreak } from "@tiptap/extension-hard-break";
-
-// Lowlight for syntax highlighting
 import { common, createLowlight } from "lowlight";
 
 // Custom extensions
-import { FontSize } from "../extensions/FontSize";
-import { LineHeight } from "../extensions/LineHeight";
-import { Video } from "../extensions/Video";
-import { Emoji } from "../extensions/Emoji";
-import { Fullscreen } from "../extensions/Fullscreen";
-import { Print } from "../extensions/Print";
-import { Indent } from "../extensions/Indent";
+import { FontSize } from "../../extensions/FontSize";
+import { LineHeight } from "../../extensions/LineHeight";
+import { Video } from "../../extensions/Video";
+import { Emoji } from "../../extensions/Emoji";
+import { Fullscreen } from "../../extensions/Fullscreen";
+import { Print } from "../../extensions/Print";
+import { Indent } from "../../extensions/Indent";
 
-// Components
-import { Toolbar } from "./Toolbar";
+// Toolbar
+import { TipTapToolbar } from "./TipTapToolbar";
 
 // Types
-import type { EditorProps, EditorRef, ToolbarButton } from "../types";
+import type { AdapterComponentProps, AdapterEditorRef } from "../../core/types";
 
 // Create lowlight instance
 const lowlight = createLowlight(common);
 
-// Toolbar presets
-const toolbarPresets: Record<"full" | "medium" | "simple", ToolbarButton[]> = {
-  full: [
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "code",
-    "separator",
-    "subscript",
-    "superscript",
-    "clearFormatting",
-    "separator",
-    "fontFamily",
-    "fontSize",
-    "lineHeight",
-    "textColor",
-    "backgroundColor",
-    "separator",
-    "alignLeft",
-    "alignCenter",
-    "alignRight",
-    "alignJustify",
-    "separator",
-    "indent",
-    "outdent",
-    "separator",
-    "bulletList",
-    "orderedList",
-    "separator",
-    "heading1",
-    "heading2",
-    "heading3",
-    "blockquote",
-    "separator",
-    "link",
-    "unlink",
-    "image",
-    "video",
-    "table",
-    "emoji",
-    "separator",
-    "codeBlock",
-    "horizontalRule",
-    "separator",
-    "undo",
-    "redo",
-    "separator",
-    "fullscreen",
-    "print",
-  ],
-  medium: [
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "separator",
-    "fontFamily",
-    "fontSize",
-    "textColor",
-    "backgroundColor",
-    "separator",
-    "alignLeft",
-    "alignCenter",
-    "alignRight",
-    "separator",
-    "bulletList",
-    "orderedList",
-    "separator",
-    "heading1",
-    "heading2",
-    "heading3",
-    "separator",
-    "link",
-    "image",
-    "table",
-    "emoji",
-    "separator",
-    "undo",
-    "redo",
-    "fullscreen",
-  ],
-  simple: [
-    "bold",
-    "italic",
-    "underline",
-    "separator",
-    "bulletList",
-    "orderedList",
-    "separator",
-    "link",
-    "image",
-    "separator",
-    "undo",
-    "redo",
-  ],
-};
+interface TipTapEditorComponentProps extends AdapterComponentProps {}
 
-export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
+export const TipTapEditorComponent = forwardRef<
+  AdapterEditorRef,
+  TipTapEditorComponentProps
+>(
   (
     {
       value = "",
@@ -169,21 +81,16 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
       readOnly = false,
       charCounterMax = -1,
       showCharCounter = false,
-      toolbarPreset = "full",
       toolbarButtons,
       className = "",
-      config = {},
       onMediaPickerImage,
       onMediaPickerVideo,
       enableCodeHighlight = true,
       defaultCodeLanguage = "javascript",
+      editorConfig = {},
     },
     ref,
   ) => {
-    // Determine which toolbar buttons to use
-    const activeToolbarButtons =
-      toolbarButtons || toolbarPresets[toolbarPreset];
-
     // Initialize editor
     const editor = useEditor({
       extensions: [
@@ -250,7 +157,6 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
         Gapcursor,
         Dropcursor,
         HardBreak,
-        // New extensions
         Emoji,
         Fullscreen,
         Print,
@@ -274,7 +180,7 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
           style: `min-height: ${minHeight}px; ${maxHeight ? `max-height: ${maxHeight}px;` : ""}`,
         },
       },
-      ...config,
+      ...editorConfig,
     });
 
     // Update content when value prop changes
@@ -324,20 +230,38 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
       getContent: () => {
         return editor?.getHTML() || "";
       },
+      getText: () => {
+        return editor?.getText() || "";
+      },
+      getJSON: () => {
+        return editor?.getJSON();
+      },
       setContent: (html: string) => {
         editor?.commands.setContent(html);
       },
       focus: () => {
         editor?.commands.focus();
       },
-      getEditor: () => {
-        return editor;
+      blur: () => {
+        editor?.commands.blur();
       },
       insertHTML: (html: string) => {
         editor?.commands.insertContent(html);
       },
+      insertText: (text: string) => {
+        editor?.commands.insertContent(text);
+      },
       clear: () => {
         editor?.commands.clearContent();
+      },
+      isEmpty: () => {
+        return editor?.isEmpty ?? true;
+      },
+      getCharacterCount: () => {
+        return editor?.storage.characterCount?.characters() || 0;
+      },
+      getWordCount: () => {
+        return editor?.storage.characterCount?.words() || 0;
       },
       isFullscreen: () => {
         return editor?.storage.fullscreen?.isFullscreen || false;
@@ -348,22 +272,37 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
       print: () => {
         editor?.commands.print();
       },
+      undo: () => {
+        editor?.commands.undo();
+      },
+      redo: () => {
+        editor?.commands.redo();
+      },
+      canUndo: () => {
+        return editor?.can().undo() ?? false;
+      },
+      canRedo: () => {
+        return editor?.can().redo() ?? false;
+      },
+      getNativeEditor: () => {
+        return editor;
+      },
     }));
 
     if (!editor) {
       return null;
     }
 
-    const characterCount = editor.storage.characterCount.characters();
+    const characterCount = editor.storage.characterCount?.characters() || 0;
     const characterLimit = charCounterMax > 0 ? charCounterMax : null;
 
     return (
       <div
         className={`rte-builder-wrapper ${disabled ? "disabled" : ""} ${readOnly ? "readonly" : ""} ${className}`}
       >
-        <Toolbar
+        <TipTapToolbar
           editor={editor}
-          buttons={activeToolbarButtons}
+          buttons={toolbarButtons}
           onMediaPickerImage={
             onMediaPickerImage ? handleMediaPickerImage : undefined
           }
@@ -396,4 +335,6 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
   },
 );
 
-RichTextEditor.displayName = "RichTextEditor";
+TipTapEditorComponent.displayName = "TipTapEditorComponent";
+
+export default TipTapEditorComponent;

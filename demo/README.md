@@ -1,6 +1,8 @@
 # RTE Builder - Interactive Demo
 
-Live demo application showcasing all features of the rte-builder WYSIWYG editor.
+Live demo application showcasing all features of the rte-builder universal rich text editor library.
+
+**Supports 3 Editor Backends:** TipTap, Slate.js, and Lexical
 
 ## Quick Start
 
@@ -17,16 +19,17 @@ Opens at: **http://localhost:3000**
 
 ## What's Inside
 
-### 8 Interactive Demo Pages
+### 9 Interactive Demo Pages
 
-1. **🚀 Basic Usage** - Default editor with all standard features
-2. **🎨 Toolbar Variations** - Compare Full, Medium, Simple, and Custom toolbars
-3. **🖼️ Media Picker** - Custom media library integration example
-4. **📝 Form Integration** - Editor integrated with form submission
-5. **⚡ Advanced Features** - Character limits, read-only, disabled states
-6. **💻 Code Editor** - Syntax highlighting for 190+ languages
-7. **📊 Performance** - Test with large documents
-8. **✨ All Features** - Complete showcase of everything
+1. **🚀 Basic Usage** - Default editor with editor selection (TipTap/Slate/Lexical)
+2. **🔄 Editor Comparison** - Compare all three editors side-by-side with feature matrix
+3. **🎨 Toolbar Variations** - Compare Full, Medium, Simple, and Custom toolbars
+4. **🖼️ Media Picker** - Custom media library integration example
+5. **📝 Form Integration** - Editor integrated with form submission
+6. **⚡ Advanced Features** - Character limits, read-only, disabled states
+7. **💻 Code Editor** - Syntax highlighting for 190+ languages
+8. **📊 Performance** - Test with large documents
+9. **✨ All Features** - Complete showcase of everything
 
 ## Technology Stack
 
@@ -76,7 +79,8 @@ demo/
 │   └── index.html         # HTML template
 ├── src/
 │   ├── demos/             # Demo pages
-│   │   ├── BasicDemo.tsx
+│   │   ├── BasicDemo.tsx          # Basic editor with editor selection
+│   │   ├── EditorComparison.tsx   # Compare TipTap vs Slate vs Lexical
 │   │   ├── ToolbarVariations.tsx
 │   │   ├── MediaPickerDemo.tsx
 │   │   ├── FormIntegration.tsx
@@ -117,11 +121,13 @@ const demos = [
 
 ### Testing Features
 
+- **Editor Switching:** Try TipTap, Slate.js, and Lexical backends
 - **Text Formatting:** Try all toolbar buttons
 - **Media:** Use sample URLs provided
 - **Code:** Insert code samples with syntax highlighting
 - **Performance:** Generate large documents
 - **Forms:** Submit and see JSON output
+- **Feature Comparison:** Check the comparison table for editor capabilities
 
 ### Sample Media URLs
 
@@ -171,6 +177,16 @@ server: {
 ## License
 
 MIT - Same as rte-builder library
+
+---
+
+## Supported Editors
+
+| Editor | Description |
+|--------|-------------|
+| **TipTap** | ProseMirror-based, highly extensible with excellent TypeScript support |
+| **Slate.js** | Completely customizable framework for building rich text editors |
+| **Lexical** | Meta's modern, extensible text editor with excellent performance |
 
 ---
 

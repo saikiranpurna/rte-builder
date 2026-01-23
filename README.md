@@ -1,79 +1,115 @@
-# rte-builder
+# RTE Builder
 
-A feature-rich, production-ready WYSIWYG editor for React based on TipTap with **zero licensing costs**. Built to replace Froala Editor with full feature parity and modern architecture.
+A **universal, adapter-based** rich text editor library for React that supports multiple editor backends. Built to be **editor-agnostic** with a unified API.
 
 ## Features
 
-✅ **No License Required** - MIT licensed, completely free
-✅ **Full Feature Parity** - All Froala features replicated
-✅ **TypeScript Native** - Full type safety
-✅ **Modern & Fast** - Built on TipTap/ProseMirror
-✅ **Syntax Highlighting** - 190+ languages via lowlight
-✅ **Media Picker Support** - Easy integration with custom media libraries
-✅ **Responsive Toolbar** - Adapts to screen sizes
-✅ **Character Counter** - Built-in with limit support
-✅ **Customizable** - Flexible toolbar and styling
+- **Multiple Editor Support**: TipTap, Slate.js, and Lexical (all included)
+- **Unified API**: Same interface works with any editor
+- **Editor Registry**: Dynamically register and switch between editors
+- **Full Feature Set**: 50+ toolbar buttons, code highlighting, tables, media, and more
+- **TypeScript First**: Complete type definitions with strict mode
+- **Zero License Costs**: All included editors are MIT licensed
+- **Customizable**: Toolbar presets, custom extensions, styling
+
+## Supported Editors
+
+| Editor | Status | Bundle Size | Description |
+|--------|--------|-------------|-------------|
+| **TipTap** | ✅ Included | ~280KB | ProseMirror-based, highly extensible |
+| **Slate.js** | ✅ Included | ~150KB | Completely customizable framework |
+| **Lexical** | ✅ Included | ~100KB | Meta's modern editor framework |
+| **Quill** | 📋 Backlog | ~50KB | Simple, lightweight editor |
+| **Draft.js** | 📋 Backlog | ~200KB | React-first by Facebook |
 
 ## 🎯 Try the Demo
 
-Experience all features interactively before installing:
-
 ```bash
-# Clone or download the library
 cd d:\projects\GrabOn\rte-builder
-
-# Install demo dependencies
 npm run demo:install
-
-# Start demo server (opens at http://localhost:3000)
 npm run demo
 ```
-
-**Demo includes 8 interactive pages:**
-- 🚀 Basic Usage
-- 🎨 Toolbar Variations
-- 🖼️ Media Picker Integration
-- 📝 Form Integration
-- ⚡ Advanced Features
-- 💻 Code Editor with Syntax Highlighting
-- 📊 Performance Testing
-- ✨ All Features Showcase
-
-👉 **[See full demo guide →](./DEMO.md)**
-
----
 
 ## Installation
 
 ```bash
 npm install rte-builder
-# or
-yarn add rte-builder
-# or
-pnpm add rte-builder
 ```
 
 ## Quick Start
 
-### Basic Usage
+### Basic Usage (TipTap - Default)
 
 ```tsx
 import { RichTextEditor } from 'rte-builder'
-import type { EditorRef } from 'rte-builder'
-import { useRef, useState } from 'react'
 
 function App() {
-  const editorRef = useRef<EditorRef>(null)
-  const [content, setContent] = useState('<p>Hello World!</p>')
+  const [content, setContent] = useState('')
 
   return (
     <RichTextEditor
-      ref={editorRef}
       value={content}
       onChange={setContent}
       placeholder="Start typing..."
       height={400}
-      toolbarPreset="full"
+    />
+  )
+}
+```
+
+### Using the Unified Editor (Recommended)
+
+```tsx
+import { UnifiedEditor } from 'rte-builder'
+import type { UnifiedEditorRef } from 'rte-builder'
+
+function App() {
+  const editorRef = useRef<UnifiedEditorRef>(null)
+  const [content, setContent] = useState('')
+
+  return (
+    <UnifiedEditor
+      editor="tiptap"  // Optional: explicitly select editor
+      value={content}
+      onChange={setContent}
+      toolbar="full"   // Use preset: 'full' | 'medium' | 'simple' | 'minimal'
+      showCharCounter
+      charCounterMax={5000}
+    />
+  )
+}
+```
+
+### With Custom Toolbar
+
+```tsx
+import { RichTextEditor, customizeToolbar } from 'rte-builder'
+
+// Create custom toolbar from preset
+const myToolbar = customizeToolbar('medium', {
+  remove: ['table', 'video'],
+  add: ['emoji', 'fullscreen'],
+})
+
+// Or define explicitly
+const myToolbar = [
+  'bold', 'italic', 'underline',
+  'separator',
+  'heading1', 'heading2',
+  'separator',
+  'bulletList', 'orderedList',
+  'separator',
+  'link', 'image',
+  'separator',
+  'undo', 'redo',
+]
+
+function App() {
+  return (
+    <RichTextEditor
+      value={content}
+      onChange={setContent}
+      toolbarButtons={myToolbar}
     />
   )
 }
@@ -86,35 +122,23 @@ import { RichTextEditor } from 'rte-builder'
 import type { MediaFile } from 'rte-builder'
 
 function App() {
-  const [content, setContent] = useState('')
-
   const handleImagePicker = async (): Promise<MediaFile | null> => {
-    // Open your custom media picker dialog
-    const file = await openMediaPickerDialog('image')
+    // Open your media picker dialog
+    const file = await openYourMediaPicker('image')
 
     if (file) {
       return {
         url: file.url,
         name: file.name,
-        alt: file.alt,
+        alt: file.name,
       }
     }
-
     return null
   }
 
   const handleVideoPicker = async (): Promise<MediaFile | null> => {
-    // Open your custom media picker dialog
-    const file = await openMediaPickerDialog('video')
-
-    if (file) {
-      return {
-        url: file.url,
-        name: file.name,
-      }
-    }
-
-    return null
+    const file = await openYourMediaPicker('video')
+    return file ? { url: file.url, name: file.name } : null
   }
 
   return (
@@ -130,135 +154,182 @@ function App() {
 
 ## API Reference
 
-### Props
+### Component Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | `''` | Initial HTML content |
-| `onChange` | `(content: string) => void` | - | Callback when content changes |
-| `onBlur` | `() => void` | - | Callback when editor loses focus |
-| `onFocus` | `() => void` | - | Callback when editor gains focus |
+| `value` | `string` | `''` | HTML content |
+| `onChange` | `(content: string) => void` | - | Content change handler |
+| `onBlur` | `() => void` | - | Blur event handler |
+| `onFocus` | `() => void` | - | Focus event handler |
 | `placeholder` | `string` | `'Start typing...'` | Placeholder text |
 | `height` | `number` | `400` | Editor height in pixels |
-| `minHeight` | `number` | `300` | Minimum height in pixels |
-| `maxHeight` | `number` | - | Maximum height in pixels |
-| `disabled` | `boolean` | `false` | Disable editor |
-| `readOnly` | `boolean` | `false` | Make editor read-only |
-| `charCounterMax` | `number` | `-1` | Character limit (-1 for unlimited) |
-| `showCharCounter` | `boolean` | `false` | Show character counter |
+| `minHeight` | `number` | `300` | Minimum height |
+| `maxHeight` | `number` | - | Maximum height |
+| `disabled` | `boolean` | `false` | Disable editing |
+| `readOnly` | `boolean` | `false` | Read-only mode |
+| `charCounterMax` | `number` | `-1` | Character limit (-1 = no limit) |
+| `showCharCounter` | `boolean` | `false` | Show character count |
 | `toolbarPreset` | `'full' \| 'medium' \| 'simple'` | `'full'` | Toolbar preset |
 | `toolbarButtons` | `ToolbarButton[]` | - | Custom toolbar buttons |
 | `className` | `string` | `''` | Additional CSS class |
-| `onMediaPickerImage` | `() => Promise<MediaFile \| null>` | - | Custom image picker |
-| `onMediaPickerVideo` | `() => Promise<MediaFile \| null>` | - | Custom video picker |
+| `onMediaPickerImage` | `() => Promise<MediaFile \| null>` | - | Image picker callback |
+| `onMediaPickerVideo` | `() => Promise<MediaFile \| null>` | - | Video picker callback |
 | `enableCodeHighlight` | `boolean` | `true` | Enable syntax highlighting |
 | `defaultCodeLanguage` | `string` | `'javascript'` | Default code language |
 
 ### Ref Methods
 
-Access editor methods via ref:
-
 ```tsx
 const editorRef = useRef<EditorRef>(null)
 
-// Get HTML content
+// Get content
 const html = editorRef.current?.getContent()
+const text = editorRef.current?.getText()
+const json = editorRef.current?.getJSON()
 
-// Set HTML content
-editorRef.current?.setContent('<p>New content</p>')
+// Set content
+editorRef.current?.setContent('<p>Hello World</p>')
 
-// Focus editor
+// Navigation
 editorRef.current?.focus()
+editorRef.current?.blur()
 
-// Insert HTML at cursor
-editorRef.current?.insertHTML('<p>Inserted content</p>')
+// Insert
+editorRef.current?.insertHTML('<strong>Bold text</strong>')
+editorRef.current?.insertText('Plain text')
 
-// Clear all content
+// Clear
 editorRef.current?.clear()
 
-// Get TipTap editor instance (for advanced usage)
-const editor = editorRef.current?.getEditor()
+// State
+const empty = editorRef.current?.isEmpty()
+const chars = editorRef.current?.getCharacterCount()
+const words = editorRef.current?.getWordCount()
+
+// History
+editorRef.current?.undo()
+editorRef.current?.redo()
+const canUndo = editorRef.current?.canUndo()
+const canRedo = editorRef.current?.canRedo()
+
+// Actions
+editorRef.current?.toggleFullscreen()
+editorRef.current?.print()
+
+// Native editor access
+const tiptapEditor = editorRef.current?.getNativeEditor()
 ```
+
+### Toolbar Buttons
+
+All available toolbar buttons:
+
+**Text Formatting:**
+`bold`, `italic`, `underline`, `strike`, `code`, `codeBlock`, `subscript`, `superscript`, `clearFormatting`
+
+**Font & Colors:**
+`fontFamily`, `fontSize`, `lineHeight`, `textColor`, `backgroundColor`
+
+**Alignment & Indentation:**
+`alignLeft`, `alignCenter`, `alignRight`, `alignJustify`, `indent`, `outdent`
+
+**Lists:**
+`bulletList`, `orderedList`
+
+**Headings:**
+`heading1`, `heading2`, `heading3`, `heading4`, `heading5`, `heading6`
+
+**Blocks:**
+`blockquote`, `horizontalRule`
+
+**Links & Media:**
+`link`, `unlink`, `image`, `video`, `table`, `emoji`
+
+**Actions:**
+`undo`, `redo`, `fullscreen`, `print`
+
+**Special:**
+`separator`
 
 ### Toolbar Presets
 
-#### Full Toolbar (Default)
-All available features including:
-- Text formatting (bold, italic, underline, strike, code)
-- Subscript, superscript
-- Font family, font size
-- Text color, background color
-- Text alignment (left, center, right, justify)
-- Lists (bullet, numbered)
-- Headings (H1-H6), blockquote
-- Links, images, videos, tables
-- Code blocks, horizontal rules
-- Undo/redo
-
-#### Medium Toolbar
-Standard editing features without advanced options:
-- Basic text formatting
-- Font family, font size, colors
-- Text alignment
-- Lists, headings
-- Links, images, tables
-- Undo/redo
-
-#### Simple Toolbar
-Minimal editing features:
-- Bold, italic, underline
-- Lists
-- Links, images
-- Undo/redo
-
-### Custom Toolbar
-
-Define your own toolbar buttons:
-
 ```tsx
-import type { ToolbarButton } from 'rte-builder'
+import { toolbarPresets, getToolbarPreset } from 'rte-builder'
 
-const customButtons: ToolbarButton[] = [
-  'bold',
-  'italic',
-  'underline',
-  'separator',
-  'bulletList',
-  'orderedList',
-  'separator',
-  'link',
-  'image',
-]
-
-<RichTextEditor
-  toolbarButtons={customButtons}
-  // ...other props
-/>
+// Available presets
+const full = getToolbarPreset('full')       // All features (50+ buttons)
+const medium = getToolbarPreset('medium')   // Standard features (30+ buttons)
+const simple = getToolbarPreset('simple')   // Basic features (12 buttons)
+const minimal = getToolbarPreset('minimal') // Just essentials (7 buttons)
+const code = getToolbarPreset('code')       // For technical docs
+const blog = getToolbarPreset('blog')       // For blog posts
+const email = getToolbarPreset('email')     // For email composition
 ```
 
-### Available Toolbar Buttons
+## Editor Registry
 
-- `bold`, `italic`, `underline`, `strike`, `code`
-- `subscript`, `superscript`
-- `clearFormatting`
-- `fontFamily`, `fontSize`
-- `textColor`, `backgroundColor`
-- `alignLeft`, `alignCenter`, `alignRight`, `alignJustify`
-- `bulletList`, `orderedList`
-- `heading1`, `heading2`, `heading3`, `heading4`, `heading5`, `heading6`
-- `blockquote`, `horizontalRule`
-- `link`, `image`, `video`, `table`
-- `codeBlock`
-- `undo`, `redo`
-- `separator` (visual separator)
+Register custom editors or check availability:
+
+```tsx
+import {
+  EditorRegistry,
+  registerAdapter,
+  isEditorAvailable,
+  getAvailableAdapters,
+  getEditorFeatures,
+} from 'rte-builder'
+
+// Check what's available
+const available = getAvailableAdapters()
+console.log(available.map(a => a.name))
+
+// Check specific editor
+if (isEditorAvailable('tiptap')) {
+  console.log('TipTap is ready!')
+}
+
+// Get feature comparison
+const features = getEditorFeatures('tiptap')
+console.log(features.tables)      // true
+console.log(features.collaboration) // false
+```
+
+## Custom Extensions (TipTap)
+
+The library exports TipTap extensions for advanced use:
+
+```tsx
+import {
+  FontSize,
+  LineHeight,
+  Video,
+  Emoji,
+  Fullscreen,
+  Print,
+  Indent,
+  EMOJI_CATEGORIES,
+} from 'rte-builder'
+
+// Use with TipTap directly
+import { useEditor } from '@tiptap/react'
+
+const editor = useEditor({
+  extensions: [
+    // ... other extensions
+    FontSize,
+    LineHeight,
+    Fullscreen,
+  ],
+})
+```
 
 ## Styling
 
-The editor comes with default styling that works out of the box. You can customize it:
-
-### Override CSS Variables
+The library includes comprehensive CSS. You can customize via CSS variables:
 
 ```css
+/* Override in your CSS */
 .rte-builder-wrapper {
   --editor-border-color: #e5e7eb;
   --editor-background: #ffffff;
@@ -266,142 +337,82 @@ The editor comes with default styling that works out of the box. You can customi
   --button-active-color: #3b82f6;
   --text-color: #1f2937;
 }
-```
 
-### Custom CSS Classes
-
-Add custom styling to specific elements:
-
-```css
-/* Custom toolbar styling */
-.my-custom-editor .rte-builder-toolbar {
-  background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+/* Or use custom classes */
+.my-editor .rte-builder-toolbar {
+  background: #1a1a1a;
 }
-
-/* Custom content styling */
-.my-custom-editor .rte-builder-content {
-  font-family: 'Georgia', serif;
-  font-size: 16px;
-}
-```
-
-## Advanced Usage
-
-### Accessing TipTap Editor Instance
-
-For advanced use cases, access the underlying TipTap editor:
-
-```tsx
-const editorRef = useRef<EditorRef>(null)
-
-const insertCustomContent = () => {
-  const editor = editorRef.current?.getEditor()
-
-  if (editor) {
-    // Use TipTap commands directly
-    editor.chain()
-      .focus()
-      .insertContent('<p>Custom content</p>')
-      .run()
-  }
-}
-```
-
-### Creating Custom Extensions
-
-Extend the editor with your own TipTap extensions:
-
-```tsx
-import { RichTextEditor } from 'rte-builder'
-import { Extension } from '@tiptap/core'
-
-const MyCustomExtension = Extension.create({
-  name: 'myCustomExtension',
-  // ... extension configuration
-})
-
-<RichTextEditor
-  config={{
-    extensions: [MyCustomExtension]
-  }}
-/>
 ```
 
 ## Migration from Froala
 
-### Key Differences
+See [MIGRATION_FROM_FROALA.md](./MIGRATION_FROM_FROALA.md) for a complete migration guide.
 
-| Feature | Froala | rte-builder |
-|---------|--------|----------------|
-| License | Paid ($399+/year) | Free (MIT) |
-| Framework | jQuery-based | React-first |
-| Bundle Size | ~500KB | ~300KB |
-| TypeScript | Partial | Native |
-| Customization | Moderate | Full control |
+**Quick comparison:**
 
-### Migration Guide
+```tsx
+// Before (Froala)
+<FroalaEditor
+  model={content}
+  onModelChange={setContent}
+  config={{
+    key: FROALA_LICENSE_KEY,  // ❌ $399+/year
+    placeholderText: 'Type...',
+  }}
+/>
 
-1. **Install the package**
-   ```bash
-   npm install rte-builder
-   ```
+// After (RTE Builder)
+<RichTextEditor
+  value={content}
+  onChange={setContent}
+  placeholder="Type..."  // ✅ FREE (MIT)
+/>
+```
 
-2. **Replace component import**
-   ```tsx
-   // Before (Froala)
-   import FroalaEditor from 'react-froala-wysiwyg'
+## Project Structure
 
-   // After (rte-builder)
-   import { RichTextEditor } from 'rte-builder'
-   ```
+```
+rte-builder/
+├── src/
+│   ├── core/               # Core types, registry, presets
+│   │   ├── types.ts        # Unified type definitions
+│   │   ├── registry.ts     # Editor adapter registry
+│   │   └── presets.ts      # Toolbar presets
+│   ├── adapters/           # Editor implementations
+│   │   ├── tiptap/         # TipTap adapter (included)
+│   │   ├── slate/          # Slate.js adapter (included)
+│   │   └── lexical/        # Lexical adapter (included)
+│   ├── components/         # React components
+│   │   ├── RichTextEditor.tsx    # Legacy TipTap component
+│   │   └── UnifiedEditor.tsx     # New unified component
+│   ├── extensions/         # Custom TipTap extensions
+│   └── styles/             # CSS styles
+├── dist/                   # Built output
+├── README.md
+└── package.json
+```
 
-3. **Update props**
-   ```tsx
-   // Before (Froala)
-   <FroalaEditor
-     model={content}
-     onModelChange={setContent}
-     config={{
-       key: FROALA_LICENSE_KEY,
-       placeholderText: 'Type here...',
-       height: 400,
-     }}
-   />
+## Roadmap
 
-   // After (rte-builder)
-   <RichTextEditor
-     value={content}
-     onChange={setContent}
-     placeholder="Type here..."
-     height={400}
-   />
-   ```
-
-4. **Migrate custom buttons**
-
-   Froala custom commands can be replaced with TipTap extensions or toolbar callbacks.
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
+- [x] **v1.0**: Complete TipTap implementation
+- [x] **v1.1**: Generic adapter architecture
+- [x] **v1.2**: Slate.js adapter
+- [x] **v1.3**: Lexical adapter
+- [ ] **v2.0**: Collaborative editing
+- [ ] **v2.1**: Comments & annotations
+- [ ] **v2.2**: Version history
+- [ ] **v2.3**: Quill adapter
+- [ ] **v2.4**: Draft.js adapter
 
 ## License
 
-MIT © RTE Builder Team
+MIT License - Free for commercial and personal use.
+
+## Contributing
+
+Contributions welcome! Please read our contributing guidelines.
 
 ## Support
 
-For issues and questions:
-- GitHub Issues: [Create an issue](https://github.com/yourusername/rte-builder/issues)
-- Documentation: [Full docs](https://github.com/yourusername/rte-builder)
-
----
-
-**Built with ❤️ using [TipTap](https://tiptap.dev)**
+- GitHub Issues: Report bugs or request features
+- Documentation: See [EXAMPLES.md](./EXAMPLES.md) and [QUICKSTART.md](./QUICKSTART.md)

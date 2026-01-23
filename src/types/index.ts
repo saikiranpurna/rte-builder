@@ -56,6 +56,12 @@ export interface EditorRef {
   insertHTML: (html: string) => void
   /** Clear all content */
   clear: () => void
+  /** Check if editor is in fullscreen mode */
+  isFullscreen: () => boolean
+  /** Toggle fullscreen mode */
+  toggleFullscreen: () => void
+  /** Print the content */
+  print: () => void
 }
 
 export interface MediaFile {
@@ -70,6 +76,7 @@ export interface MediaFile {
 }
 
 export type ToolbarButton =
+  // Text formatting
   | 'bold'
   | 'italic'
   | 'underline'
@@ -79,30 +86,45 @@ export type ToolbarButton =
   | 'subscript'
   | 'superscript'
   | 'clearFormatting'
+  // Font & Colors
   | 'fontFamily'
   | 'fontSize'
+  | 'lineHeight'
   | 'textColor'
   | 'backgroundColor'
+  // Alignment & Indentation
   | 'alignLeft'
   | 'alignCenter'
   | 'alignRight'
   | 'alignJustify'
+  | 'indent'
+  | 'outdent'
+  // Lists
   | 'bulletList'
   | 'orderedList'
+  // Headings
   | 'heading1'
   | 'heading2'
   | 'heading3'
   | 'heading4'
   | 'heading5'
   | 'heading6'
+  // Blocks
   | 'blockquote'
   | 'horizontalRule'
+  // Links & Media
   | 'link'
+  | 'unlink'
   | 'image'
   | 'video'
   | 'table'
+  | 'emoji'
+  // Actions
   | 'undo'
   | 'redo'
+  | 'fullscreen'
+  | 'print'
+  // Special
   | 'separator'
 
 export interface ToolbarConfig {
