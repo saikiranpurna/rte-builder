@@ -20,6 +20,64 @@
   background: #f9fafb;
 }
 
+/* Unified Editor Wrapper */
+.rte-builder-unified-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Editor Switcher */
+.rte-builder-editor-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.rte-builder-editor-switcher-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.rte-builder-editor-switcher-select {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 140px;
+}
+
+.rte-builder-editor-switcher-select:hover:not(:disabled) {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+.rte-builder-editor-switcher-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.rte-builder-editor-switcher-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rte-builder-unified-wrapper .rte-builder-wrapper {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
 /* Toolbar */
 .rte-builder-toolbar {
   display: flex;

@@ -122,6 +122,10 @@ export interface ToolbarConfig {
 export interface UnifiedEditorProps {
   /** Which editor to use */
   editor?: EditorType
+  /** Show editor switcher dropdown in toolbar */
+  showEditorSwitcher?: boolean
+  /** Callback when editor type changes via switcher */
+  onEditorChange?: (editorType: EditorType) => void
   /** Initial content (HTML string) */
   value?: string
   /** Callback when content changes */

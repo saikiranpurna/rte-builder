@@ -14,13 +14,13 @@ A **universal, adapter-based** rich text editor library for React that supports 
 
 ## Supported Editors
 
-| Editor | Status | Bundle Size | Description |
-|--------|--------|-------------|-------------|
-| **TipTap** | ✅ Included | ~280KB | ProseMirror-based, highly extensible |
-| **Slate.js** | ✅ Included | ~150KB | Completely customizable framework |
-| **Lexical** | ✅ Included | ~100KB | Meta's modern editor framework |
-| **Quill** | 📋 Backlog | ~50KB | Simple, lightweight editor |
-| **Draft.js** | 📋 Backlog | ~200KB | React-first by Facebook |
+| Editor       | Status      | Bundle Size | Description                          |
+| ------------ | ----------- | ----------- | ------------------------------------ |
+| **TipTap**   | ✅ Included | ~280KB      | ProseMirror-based, highly extensible |
+| **Slate.js** | ✅ Included | ~150KB      | Completely customizable framework    |
+| **Lexical**  | ✅ Included | ~100KB      | Meta's modern editor framework       |
+| **Quill**    | 📋 Backlog  | ~50KB       | Simple, lightweight editor           |
+| **Draft.js** | 📋 Backlog  | ~200KB      | React-first by Facebook              |
 
 ## 🎯 Try the Demo
 
@@ -41,10 +41,10 @@ npm install rte-builder
 ### Basic Usage (TipTap - Default)
 
 ```tsx
-import { RichTextEditor } from 'rte-builder'
+import { RichTextEditor } from "rte-builder";
 
 function App() {
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState("");
 
   return (
     <RichTextEditor
@@ -53,56 +53,62 @@ function App() {
       placeholder="Start typing..."
       height={400}
     />
-  )
+  );
 }
 ```
 
 ### Using the Unified Editor (Recommended)
 
 ```tsx
-import { UnifiedEditor } from 'rte-builder'
-import type { UnifiedEditorRef } from 'rte-builder'
+import { UnifiedEditor } from "rte-builder";
+import type { UnifiedEditorRef } from "rte-builder";
 
 function App() {
-  const editorRef = useRef<UnifiedEditorRef>(null)
-  const [content, setContent] = useState('')
+  const editorRef = useRef<UnifiedEditorRef>(null);
+  const [content, setContent] = useState("");
 
   return (
     <UnifiedEditor
-      editor="tiptap"  // Optional: explicitly select editor
+      editor="tiptap" // Optional: explicitly select editor
       value={content}
       onChange={setContent}
-      toolbar="full"   // Use preset: 'full' | 'medium' | 'simple' | 'minimal'
+      toolbar="full" // Use preset: 'full' | 'medium' | 'simple' | 'minimal'
       showCharCounter
       charCounterMax={5000}
     />
-  )
+  );
 }
 ```
 
 ### With Custom Toolbar
 
 ```tsx
-import { RichTextEditor, customizeToolbar } from 'rte-builder'
+import { RichTextEditor, customizeToolbar } from "rte-builder";
 
 // Create custom toolbar from preset
-const myToolbar = customizeToolbar('medium', {
-  remove: ['table', 'video'],
-  add: ['emoji', 'fullscreen'],
-})
+const myToolbar = customizeToolbar("medium", {
+  remove: ["table", "video"],
+  add: ["emoji", "fullscreen"],
+});
 
 // Or define explicitly
 const myToolbar = [
-  'bold', 'italic', 'underline',
-  'separator',
-  'heading1', 'heading2',
-  'separator',
-  'bulletList', 'orderedList',
-  'separator',
-  'link', 'image',
-  'separator',
-  'undo', 'redo',
-]
+  "bold",
+  "italic",
+  "underline",
+  "separator",
+  "heading1",
+  "heading2",
+  "separator",
+  "bulletList",
+  "orderedList",
+  "separator",
+  "link",
+  "image",
+  "separator",
+  "undo",
+  "redo",
+];
 
 function App() {
   return (
@@ -111,35 +117,35 @@ function App() {
       onChange={setContent}
       toolbarButtons={myToolbar}
     />
-  )
+  );
 }
 ```
 
 ### With Media Picker Integration
 
 ```tsx
-import { RichTextEditor } from 'rte-builder'
-import type { MediaFile } from 'rte-builder'
+import { RichTextEditor } from "rte-builder";
+import type { MediaFile } from "rte-builder";
 
 function App() {
   const handleImagePicker = async (): Promise<MediaFile | null> => {
     // Open your media picker dialog
-    const file = await openYourMediaPicker('image')
+    const file = await openYourMediaPicker("image");
 
     if (file) {
       return {
         url: file.url,
         name: file.name,
         alt: file.name,
-      }
+      };
     }
-    return null
-  }
+    return null;
+  };
 
   const handleVideoPicker = async (): Promise<MediaFile | null> => {
-    const file = await openYourMediaPicker('video')
-    return file ? { url: file.url, name: file.name } : null
-  }
+    const file = await openYourMediaPicker("video");
+    return file ? { url: file.url, name: file.name } : null;
+  };
 
   return (
     <RichTextEditor
@@ -148,7 +154,7 @@ function App() {
       onMediaPickerImage={handleImagePicker}
       onMediaPickerVideo={handleVideoPicker}
     />
-  )
+  );
 }
 ```
 
@@ -156,69 +162,69 @@ function App() {
 
 ### Component Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string` | `''` | HTML content |
-| `onChange` | `(content: string) => void` | - | Content change handler |
-| `onBlur` | `() => void` | - | Blur event handler |
-| `onFocus` | `() => void` | - | Focus event handler |
-| `placeholder` | `string` | `'Start typing...'` | Placeholder text |
-| `height` | `number` | `400` | Editor height in pixels |
-| `minHeight` | `number` | `300` | Minimum height |
-| `maxHeight` | `number` | - | Maximum height |
-| `disabled` | `boolean` | `false` | Disable editing |
-| `readOnly` | `boolean` | `false` | Read-only mode |
-| `charCounterMax` | `number` | `-1` | Character limit (-1 = no limit) |
-| `showCharCounter` | `boolean` | `false` | Show character count |
-| `toolbarPreset` | `'full' \| 'medium' \| 'simple'` | `'full'` | Toolbar preset |
-| `toolbarButtons` | `ToolbarButton[]` | - | Custom toolbar buttons |
-| `className` | `string` | `''` | Additional CSS class |
-| `onMediaPickerImage` | `() => Promise<MediaFile \| null>` | - | Image picker callback |
-| `onMediaPickerVideo` | `() => Promise<MediaFile \| null>` | - | Video picker callback |
-| `enableCodeHighlight` | `boolean` | `true` | Enable syntax highlighting |
-| `defaultCodeLanguage` | `string` | `'javascript'` | Default code language |
+| Prop                  | Type                               | Default             | Description                     |
+| --------------------- | ---------------------------------- | ------------------- | ------------------------------- |
+| `value`               | `string`                           | `''`                | HTML content                    |
+| `onChange`            | `(content: string) => void`        | -                   | Content change handler          |
+| `onBlur`              | `() => void`                       | -                   | Blur event handler              |
+| `onFocus`             | `() => void`                       | -                   | Focus event handler             |
+| `placeholder`         | `string`                           | `'Start typing...'` | Placeholder text                |
+| `height`              | `number`                           | `400`               | Editor height in pixels         |
+| `minHeight`           | `number`                           | `300`               | Minimum height                  |
+| `maxHeight`           | `number`                           | -                   | Maximum height                  |
+| `disabled`            | `boolean`                          | `false`             | Disable editing                 |
+| `readOnly`            | `boolean`                          | `false`             | Read-only mode                  |
+| `charCounterMax`      | `number`                           | `-1`                | Character limit (-1 = no limit) |
+| `showCharCounter`     | `boolean`                          | `false`             | Show character count            |
+| `toolbarPreset`       | `'full' \| 'medium' \| 'simple'`   | `'full'`            | Toolbar preset                  |
+| `toolbarButtons`      | `ToolbarButton[]`                  | -                   | Custom toolbar buttons          |
+| `className`           | `string`                           | `''`                | Additional CSS class            |
+| `onMediaPickerImage`  | `() => Promise<MediaFile \| null>` | -                   | Image picker callback           |
+| `onMediaPickerVideo`  | `() => Promise<MediaFile \| null>` | -                   | Video picker callback           |
+| `enableCodeHighlight` | `boolean`                          | `true`              | Enable syntax highlighting      |
+| `defaultCodeLanguage` | `string`                           | `'javascript'`      | Default code language           |
 
 ### Ref Methods
 
 ```tsx
-const editorRef = useRef<EditorRef>(null)
+const editorRef = useRef<EditorRef>(null);
 
 // Get content
-const html = editorRef.current?.getContent()
-const text = editorRef.current?.getText()
-const json = editorRef.current?.getJSON()
+const html = editorRef.current?.getContent();
+const text = editorRef.current?.getText();
+const json = editorRef.current?.getJSON();
 
 // Set content
-editorRef.current?.setContent('<p>Hello World</p>')
+editorRef.current?.setContent("<p>Hello World</p>");
 
 // Navigation
-editorRef.current?.focus()
-editorRef.current?.blur()
+editorRef.current?.focus();
+editorRef.current?.blur();
 
 // Insert
-editorRef.current?.insertHTML('<strong>Bold text</strong>')
-editorRef.current?.insertText('Plain text')
+editorRef.current?.insertHTML("<strong>Bold text</strong>");
+editorRef.current?.insertText("Plain text");
 
 // Clear
-editorRef.current?.clear()
+editorRef.current?.clear();
 
 // State
-const empty = editorRef.current?.isEmpty()
-const chars = editorRef.current?.getCharacterCount()
-const words = editorRef.current?.getWordCount()
+const empty = editorRef.current?.isEmpty();
+const chars = editorRef.current?.getCharacterCount();
+const words = editorRef.current?.getWordCount();
 
 // History
-editorRef.current?.undo()
-editorRef.current?.redo()
-const canUndo = editorRef.current?.canUndo()
-const canRedo = editorRef.current?.canRedo()
+editorRef.current?.undo();
+editorRef.current?.redo();
+const canUndo = editorRef.current?.canUndo();
+const canRedo = editorRef.current?.canRedo();
 
 // Actions
-editorRef.current?.toggleFullscreen()
-editorRef.current?.print()
+editorRef.current?.toggleFullscreen();
+editorRef.current?.print();
 
 // Native editor access
-const tiptapEditor = editorRef.current?.getNativeEditor()
+const tiptapEditor = editorRef.current?.getNativeEditor();
 ```
 
 ### Toolbar Buttons
@@ -255,16 +261,16 @@ All available toolbar buttons:
 ### Toolbar Presets
 
 ```tsx
-import { toolbarPresets, getToolbarPreset } from 'rte-builder'
+import { toolbarPresets, getToolbarPreset } from "rte-builder";
 
 // Available presets
-const full = getToolbarPreset('full')       // All features (50+ buttons)
-const medium = getToolbarPreset('medium')   // Standard features (30+ buttons)
-const simple = getToolbarPreset('simple')   // Basic features (12 buttons)
-const minimal = getToolbarPreset('minimal') // Just essentials (7 buttons)
-const code = getToolbarPreset('code')       // For technical docs
-const blog = getToolbarPreset('blog')       // For blog posts
-const email = getToolbarPreset('email')     // For email composition
+const full = getToolbarPreset("full"); // All features (50+ buttons)
+const medium = getToolbarPreset("medium"); // Standard features (30+ buttons)
+const simple = getToolbarPreset("simple"); // Basic features (12 buttons)
+const minimal = getToolbarPreset("minimal"); // Just essentials (7 buttons)
+const code = getToolbarPreset("code"); // For technical docs
+const blog = getToolbarPreset("blog"); // For blog posts
+const email = getToolbarPreset("email"); // For email composition
 ```
 
 ## Editor Registry
@@ -278,21 +284,21 @@ import {
   isEditorAvailable,
   getAvailableAdapters,
   getEditorFeatures,
-} from 'rte-builder'
+} from "rte-builder";
 
 // Check what's available
-const available = getAvailableAdapters()
-console.log(available.map(a => a.name))
+const available = getAvailableAdapters();
+console.log(available.map((a) => a.name));
 
 // Check specific editor
-if (isEditorAvailable('tiptap')) {
-  console.log('TipTap is ready!')
+if (isEditorAvailable("tiptap")) {
+  console.log("TipTap is ready!");
 }
 
 // Get feature comparison
-const features = getEditorFeatures('tiptap')
-console.log(features.tables)      // true
-console.log(features.collaboration) // false
+const features = getEditorFeatures("tiptap");
+console.log(features.tables); // true
+console.log(features.collaboration); // false
 ```
 
 ## Custom Extensions (TipTap)
@@ -309,10 +315,10 @@ import {
   Print,
   Indent,
   EMOJI_CATEGORIES,
-} from 'rte-builder'
+} from "rte-builder";
 
 // Use with TipTap directly
-import { useEditor } from '@tiptap/react'
+import { useEditor } from "@tiptap/react";
 
 const editor = useEditor({
   extensions: [
@@ -321,7 +327,7 @@ const editor = useEditor({
     LineHeight,
     Fullscreen,
   ],
-})
+});
 ```
 
 ## Styling
@@ -342,31 +348,6 @@ The library includes comprehensive CSS. You can customize via CSS variables:
 .my-editor .rte-builder-toolbar {
   background: #1a1a1a;
 }
-```
-
-## Migration from Froala
-
-See [MIGRATION_FROM_FROALA.md](./MIGRATION_FROM_FROALA.md) for a complete migration guide.
-
-**Quick comparison:**
-
-```tsx
-// Before (Froala)
-<FroalaEditor
-  model={content}
-  onModelChange={setContent}
-  config={{
-    key: FROALA_LICENSE_KEY,  // ❌ $399+/year
-    placeholderText: 'Type...',
-  }}
-/>
-
-// After (RTE Builder)
-<RichTextEditor
-  value={content}
-  onChange={setContent}
-  placeholder="Type..."  // ✅ FREE (MIT)
-/>
 ```
 
 ## Project Structure

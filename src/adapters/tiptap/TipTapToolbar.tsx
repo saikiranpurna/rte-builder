@@ -632,11 +632,7 @@ export const TipTapToolbar: React.FC<TipTapToolbarProps> = ({
         )
 
       case 'separator':
-        return (
-          <span key={`sep-${index}`} className="rte-builder-toolbar-separator">
-            |
-          </span>
-        )
+        return <div key={`sep-${index}`} className="rte-builder-toolbar-separator" />
 
       default:
         return null

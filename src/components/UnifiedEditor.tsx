@@ -5,7 +5,7 @@
  * It provides a unified interface that works with any registered editor adapter.
  */
 
-import { forwardRef, useImperativeHandle, useRef, useMemo } from "react";
+import { forwardRef, useImperativeHandle, useRef, useMemo, useState } from "react";
 import type {
   UnifiedEditorProps,
   UnifiedEditorRef,
@@ -13,20 +13,34 @@ import type {
   ToolbarButtonType,
   AdapterEditorRef,
 } from "../core/types";
-import { getAdapter, getBestAvailableEditor } from "../core/registry";
+import {
+  getAdapter,
+  getBestAvailableEditor,
+  getAvailableAdapters,
+  registerAdapter,
+} from "../core/registry";
 import { getToolbarPreset, toolbarPresets } from "../core/presets";
 
-// Import and register the TipTap adapter by default
+// Import and register all adapters
 import { TipTapAdapter } from "../adapters/tiptap";
-import { registerAdapter } from "../core/registry";
+import { SlateAdapter } from "../adapters/slate/SlateAdapter";
+import { LexicalAdapter } from "../adapters/lexical/LexicalAdapter";
 
-// Register TipTap adapter on module load
+// Register adapters on module load (only if available)
 registerAdapter(TipTapAdapter);
+if (SlateAdapter.isAvailable()) {
+  registerAdapter(SlateAdapter);
+}
+if (LexicalAdapter.isAvailable()) {
+  registerAdapter(LexicalAdapter);
+}
 
 export const UnifiedEditor = forwardRef<UnifiedEditorRef, UnifiedEditorProps>(
   (
     {
       editor: editorType,
+      showEditorSwitcher = false,
+      onEditorChange,
       value = "",
       onChange,
       onBlur,
@@ -51,20 +65,36 @@ export const UnifiedEditor = forwardRef<UnifiedEditorRef, UnifiedEditorProps>(
     ref,
   ) => {
     const adapterRef = useRef<AdapterEditorRef>(null);
+    const [internalEditorType, setInternalEditorType] = useState<EditorType | undefined>(editorType);
+
+    // Get available adapters for the switcher
+    const availableAdapters = useMemo(() => getAvailableAdapters(), []);
+
+    // Determine which editor to use (controlled or internal state)
+    const currentEditorType = editorType !== undefined ? editorType : internalEditorType;
 
     // Determine which editor to use
     const selectedAdapter = useMemo(() => {
-      if (editorType) {
-        const adapter = getAdapter(editorType);
+      if (currentEditorType) {
+        const adapter = getAdapter(currentEditorType);
         if (adapter?.isAvailable()) {
           return adapter;
         }
         console.warn(
-          `Editor "${editorType}" is not available. Falling back to best available.`,
+          `Editor "${currentEditorType}" is not available. Falling back to best available.`,
         );
       }
       return getBestAvailableEditor();
-    }, [editorType]);
+    }, [currentEditorType]);
+
+    // Handle editor switch
+    const handleEditorSwitch = (newEditorType: EditorType) => {
+      if (onEditorChange) {
+        onEditorChange(newEditorType);
+      } else {
+        setInternalEditorType(newEditorType);
+      }
+    };
 
     // Determine toolbar buttons
     const toolbarButtons = useMemo((): ToolbarButtonType[] => {
@@ -134,28 +164,47 @@ export const UnifiedEditor = forwardRef<UnifiedEditorRef, UnifiedEditorProps>(
     };
 
     return (
-      <EditorComponent
-        editorRef={adapterRef}
-        value={value}
-        onChange={handleChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        placeholder={placeholder}
-        height={height}
-        minHeight={minHeight}
-        maxHeight={maxHeight}
-        disabled={disabled}
-        readOnly={readOnly}
-        charCounterMax={charCounterMax}
-        showCharCounter={showCharCounter}
-        toolbarButtons={toolbarButtons}
-        className={className}
-        onMediaPickerImage={onMediaPickerImage}
-        onMediaPickerVideo={onMediaPickerVideo}
-        enableCodeHighlight={enableCodeHighlight}
-        defaultCodeLanguage={defaultCodeLanguage}
-        editorConfig={editorConfig}
-      />
+      <div className={`rte-builder-unified-wrapper ${className}`}>
+        {showEditorSwitcher && availableAdapters.length > 1 && (
+          <div className="rte-builder-editor-switcher">
+            <label className="rte-builder-editor-switcher-label">Editor:</label>
+            <select
+              className="rte-builder-editor-switcher-select"
+              value={selectedAdapter.type}
+              onChange={(e) => handleEditorSwitch(e.target.value as EditorType)}
+              disabled={disabled}
+            >
+              {availableAdapters.map((adapter) => (
+                <option key={adapter.type} value={adapter.type}>
+                  {adapter.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        <EditorComponent
+          key={selectedAdapter.type}
+          editorRef={adapterRef}
+          value={value}
+          onChange={handleChange}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          placeholder={placeholder}
+          height={height}
+          minHeight={minHeight}
+          maxHeight={maxHeight}
+          disabled={disabled}
+          readOnly={readOnly}
+          charCounterMax={charCounterMax}
+          showCharCounter={showCharCounter}
+          toolbarButtons={toolbarButtons}
+          onMediaPickerImage={onMediaPickerImage}
+          onMediaPickerVideo={onMediaPickerVideo}
+          enableCodeHighlight={enableCodeHighlight}
+          defaultCodeLanguage={defaultCodeLanguage}
+          editorConfig={editorConfig}
+        />
+      </div>
     );
   },
 );

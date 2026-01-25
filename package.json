@@ -1,7 +1,7 @@
 {
   "name": "rte-builder",
   "version": "1.0.0",
-  "description": "A feature-rich TipTap-based WYSIWYG editor for React with zero licensing costs",
+  "description": "A universal Rich Text Editor for React supporting multiple backends (TipTap, Slate, Lexical) with a unified API, full toolbar customization, and zero licensing costs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -31,11 +31,28 @@
     "editor",
     "wysiwyg",
     "tiptap",
+    "slate",
+    "lexical",
     "rich-text",
-    "contenteditable"
+    "rich-text-editor",
+    "contenteditable",
+    "prosemirror",
+    "text-editor",
+    "html-editor",
+    "markdown",
+    "toolbar",
+    "formatting"
   ],
-  "author": "Your Name",
+  "author": "saikiran949",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saikiran949/rte-builder.git"
+  },
+  "homepage": "https://github.com/saikiran949/rte-builder#readme",
+  "bugs": {
+    "url": "https://github.com/saikiran949/rte-builder/issues"
+  },
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
