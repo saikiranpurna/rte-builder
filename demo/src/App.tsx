@@ -6,6 +6,9 @@ import ToolbarConfig from "./pages/ToolbarConfig";
 import APIReference from "./pages/APIReference";
 import Examples from "./pages/Examples";
 import Playground from "./pages/Playground";
+import Collaboration from "./pages/Collaboration";
+import Comments from "./pages/Comments";
+import VersionHistory from "./pages/VersionHistory";
 
 // Theme Context
 type Theme = "light" | "dark";
@@ -24,6 +27,9 @@ type Page =
   | "installation"
   | "basic-usage"
   | "toolbar"
+  | "collaboration"
+  | "comments"
+  | "version-history"
   | "api"
   | "examples"
   | "playground";
@@ -42,6 +48,14 @@ const navigation = [
     items: [{ id: "toolbar" as const, label: "Toolbar Configuration" }],
   },
   {
+    title: "Advanced Features",
+    items: [
+      { id: "collaboration" as const, label: "Collaborative Editing" },
+      { id: "comments" as const, label: "Comments & Annotations" },
+      { id: "version-history" as const, label: "Version History" },
+    ],
+  },
+  {
     title: "Reference",
     items: [
       { id: "api" as const, label: "API Reference" },
@@ -55,6 +69,9 @@ const pageComponents: Record<Page, React.ComponentType> = {
   installation: Installation,
   "basic-usage": BasicUsage,
   toolbar: ToolbarConfig,
+  collaboration: Collaboration,
+  comments: Comments,
+  "version-history": VersionHistory,
   api: APIReference,
   examples: Examples,
   playground: Playground,
@@ -135,7 +152,7 @@ function App() {
               <span className="logo-icon">📝</span>
               <span className="logo-text">RTE Builder</span>
             </a>
-            <span className="version-badge">v1.0.0</span>
+            <span className="version-badge">v2.0.0</span>
             <span className="license-badge">MIT</span>
           </div>
 

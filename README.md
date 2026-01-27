@@ -379,11 +379,118 @@ rte-builder/
 - [x] **v1.1**: Generic adapter architecture
 - [x] **v1.2**: Slate.js adapter
 - [x] **v1.3**: Lexical adapter
-- [ ] **v2.0**: Collaborative editing
-- [ ] **v2.1**: Comments & annotations
-- [ ] **v2.2**: Version history
+- [x] **v2.0**: Collaborative editing
+- [x] **v2.1**: Comments & annotations
+- [x] **v2.2**: Version history
 - [ ] **v2.3**: Quill adapter
 - [ ] **v2.4**: Draft.js adapter
+
+## Collaborative Editing (v2.0)
+
+Enable real-time collaboration with presence indicators:
+
+```tsx
+import { UnifiedEditor, CollaborationProvider, PresenceIndicator } from 'rte-builder'
+
+function CollaborativeEditor() {
+  return (
+    <CollaborationProvider
+      config={{
+        provider: 'websocket',
+        serverUrl: 'wss://your-server.com/collab',
+        roomId: 'document-123',
+        user: {
+          id: 'user-1',
+          name: 'John Doe',
+          color: '#3b82f6',
+        },
+      }}
+      onStatusChange={(status) => console.log('Status:', status)}
+      onUsersChange={(users) => console.log('Users:', users)}
+    >
+      <PresenceIndicator />
+      <UnifiedEditor
+        value={content}
+        onChange={setContent}
+      />
+    </CollaborationProvider>
+  )
+}
+```
+
+## Comments & Annotations (v2.1)
+
+Add inline comments and annotations to your documents:
+
+```tsx
+import { UnifiedEditor, CommentsProvider, CommentsPanel } from 'rte-builder'
+
+function EditorWithComments() {
+  return (
+    <CommentsProvider
+      config={{
+        currentUser: {
+          id: 'user-1',
+          name: 'John Doe',
+        },
+        allowResolve: true,
+        allowReactions: true,
+      }}
+      onThreadsChange={(threads) => saveThreads(threads)}
+    >
+      <div style={{ display: 'flex' }}>
+        <UnifiedEditor
+          value={content}
+          onChange={setContent}
+        />
+        <CommentsPanel position="right" />
+      </div>
+    </CommentsProvider>
+  )
+}
+```
+
+## Version History (v2.2)
+
+Track and restore document versions:
+
+```tsx
+import { UnifiedEditor, VersionHistoryProvider, VersionHistoryPanel } from 'rte-builder'
+
+function EditorWithHistory() {
+  const editorRef = useRef(null)
+
+  return (
+    <VersionHistoryProvider
+      config={{
+        currentUser: {
+          id: 'user-1',
+          name: 'John Doe',
+        },
+        autoSave: true,
+        autoSaveInterval: 60000, // 1 minute
+        maxVersions: 100,
+        onRestore: (version) => {
+          editorRef.current?.setContent(version.content)
+        },
+      }}
+      getCurrentContent={() => ({
+        html: editorRef.current?.getContent() || '',
+        text: editorRef.current?.getText() || '',
+      })}
+    >
+      <div style={{ display: 'flex' }}>
+        <UnifiedEditor
+          ref={editorRef}
+          value={content}
+          onChange={setContent}
+        />
+        <VersionHistoryPanel position="right" />
+      </div>
+    </VersionHistoryProvider>
+  )
+}
+```
 
 ## License
 
@@ -396,4 +503,3 @@ Contributions welcome! Please read our contributing guidelines.
 ## Support
 
 - GitHub Issues: Report bugs or request features
-- Documentation: See [EXAMPLES.md](./EXAMPLES.md) and [QUICKSTART.md](./QUICKSTART.md)

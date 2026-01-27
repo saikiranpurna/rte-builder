@@ -1,10 +1,8 @@
 import { useState } from "react";
 import {
   UnifiedEditor,
-  getAvailableAdapters,
-  getEditorFeatures,
 } from "rte-builder";
-import type { EditorType, UnifiedEditorRef } from "rte-builder";
+import type { EditorType } from "rte-builder";
 
 export default function EditorComparison() {
   const [content, setContent] = useState<Record<EditorType, string>>({

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 
 interface CodeBlockProps {
-  code: string;
+  code?: string;
+  children?: ReactNode;
   language?: string;
   filename?: string;
   showLineNumbers?: boolean;
@@ -9,19 +10,22 @@ interface CodeBlockProps {
 
 export function CodeBlock({
   code,
+  children,
   language = "tsx",
   filename,
   showLineNumbers = true,
 }: CodeBlockProps) {
+  // Support both code prop and children
+  const codeContent = code || (typeof children === 'string' ? children : '');
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
+    await navigator.clipboard.writeText(codeContent);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const lines = code.trim().split("\n");
+  const lines = codeContent.trim().split("\n");
 
   return (
     <div className="code-block">
@@ -81,10 +85,10 @@ export function CodeBlock({
                   </span>
                 ))}
               </div>
-              <code className="code-content-column">{code.trim()}</code>
+              <code className="code-content-column">{codeContent.trim()}</code>
             </div>
           ) : (
-            <code>{code.trim()}</code>
+            <code>{codeContent.trim()}</code>
           )}
         </pre>
       </div>

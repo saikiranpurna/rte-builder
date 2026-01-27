@@ -3,7 +3,7 @@ import { RichTextEditor } from 'rte-builder'
 
 export default function AdvancedFeatures() {
   const [content1, setContent1] = useState('<p>This editor has a character limit...</p>')
-  const [content2, setContent2] = useState('<p>This editor is read-only...</p>')
+  const [content2] = useState('<p>This editor is read-only...</p>')
   const [content3, setContent3] = useState('<p>This editor can be disabled...</p>')
   const [isDisabled, setIsDisabled] = useState(false)
   const [content4, setContent4] = useState('<p>This editor has custom height constraints...</p>')

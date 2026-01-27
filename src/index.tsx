@@ -132,8 +132,80 @@ export { Print } from "./extensions/Print";
 export { Indent } from "./extensions/Indent";
 
 // ============================================================================
+// COLLABORATION EXPORTS (v2.0)
+// ============================================================================
+
+export {
+  CollaborationProvider,
+  useCollaboration,
+  useCollaborationOptional,
+} from "./collaboration";
+
+export type {
+  CollaborationUser,
+  CollaborationConfig,
+  CollaborationState,
+  CollaborationStatus,
+  CollaborationEvent,
+  CollaborationProps,
+  CursorPosition,
+} from "./collaboration";
+
+export { PresenceIndicator } from "./collaboration/PresenceIndicator";
+
+// ============================================================================
+// COMMENTS EXPORTS (v2.1)
+// ============================================================================
+
+export {
+  CommentsProvider,
+  useComments,
+  useCommentsOptional,
+  DEFAULT_REACTION_EMOJIS,
+} from "./comments";
+
+export type {
+  Comment,
+  CommentThread,
+  CommentAuthor,
+  CommentRange,
+  CommentsConfig,
+  CommentsState,
+  CommentEvent,
+  CommentsProps,
+} from "./comments";
+
+export { CommentsPanel } from "./comments/CommentsPanel";
+
+// ============================================================================
+// VERSION HISTORY EXPORTS (v2.2)
+// ============================================================================
+
+export {
+  VersionHistoryProvider,
+  useVersionHistory,
+  useVersionHistoryOptional,
+} from "./history";
+
+export type {
+  Version,
+  VersionAuthor,
+  VersionHistoryConfig,
+  VersionHistoryState,
+  VersionHistoryEvent,
+  VersionHistoryProps,
+  VersionComparison,
+  VersionChange,
+} from "./history";
+
+export { VersionHistoryPanel } from "./history/VersionHistoryPanel";
+
+// ============================================================================
 // STYLES
 // ============================================================================
 
 // Import styles (they will be bundled with the library)
 import "./styles/editor.css";
+import "./styles/collaboration.css";
+import "./styles/comments.css";
+import "./styles/version-history.css";
