@@ -8,13 +8,9 @@ import type { EditorAdapter, EditorFeatures } from "../../core/types";
 import { DEFAULT_FEATURES } from "../../core/types";
 
 // Check if TipTap is available
+// Since TipTap is bundled with rte-builder, it's always available
 function checkTipTapAvailable(): boolean {
-  try {
-    require("@tiptap/react");
-    return true;
-  } catch {
-    return false;
-  }
+  return true;
 }
 
 // TipTap features

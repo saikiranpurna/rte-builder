@@ -2,6 +2,41 @@ import React, { useState, useRef, useEffect } from "react";
 import type { Editor } from "@tiptap/react";
 import type { ToolbarButton } from "../types";
 import { EMOJI_CATEGORIES } from "../extensions/Emoji";
+import {
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Code,
+  FileCode,
+  Subscript,
+  Superscript,
+  RemoveFormatting,
+  Type,
+  Highlighter,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  Indent,
+  Outdent,
+  List,
+  ListOrdered,
+  Heading,
+  Quote,
+  Minus,
+  Link,
+  Unlink,
+  Image,
+  Video,
+  Table,
+  Smile,
+  Maximize,
+  Minimize,
+  Printer,
+  Undo,
+  Redo,
+} from "lucide-react";
 
 interface ToolbarProps {
   editor: Editor | null;
@@ -176,7 +211,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("bold")}
             title="Bold (Ctrl+B)"
           >
-            <strong>B</strong>
+            <Bold size={18} />
           </ToolbarButton>
         );
 
@@ -188,7 +223,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("italic")}
             title="Italic (Ctrl+I)"
           >
-            <em>I</em>
+            <Italic size={18} />
           </ToolbarButton>
         );
 
@@ -200,7 +235,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("underline")}
             title="Underline (Ctrl+U)"
           >
-            <u>U</u>
+            <Underline size={18} />
           </ToolbarButton>
         );
 
@@ -212,7 +247,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("strike")}
             title="Strikethrough"
           >
-            <s>S</s>
+            <Strikethrough size={18} />
           </ToolbarButton>
         );
 
@@ -224,7 +259,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("code")}
             title="Inline Code"
           >
-            {"</>"}
+            <Code size={18} />
           </ToolbarButton>
         );
 
@@ -236,7 +271,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("codeBlock")}
             title="Code Block"
           >
-            {"{ }"}
+            <FileCode size={18} />
           </ToolbarButton>
         );
 
@@ -248,7 +283,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("subscript")}
             title="Subscript"
           >
-            X<sub>2</sub>
+            <Subscript size={18} />
           </ToolbarButton>
         );
 
@@ -260,7 +295,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("superscript")}
             title="Superscript"
           >
-            X<sup>2</sup>
+            <Superscript size={18} />
           </ToolbarButton>
         );
 
@@ -273,7 +308,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             }
             title="Clear Formatting"
           >
-            ✕
+            <RemoveFormatting size={18} />
           </ToolbarButton>
         );
 
@@ -355,7 +390,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         return (
           <span key="textColor" className="rte-builder-toolbar-color">
             <label title="Text Color">
-              A
+              <Type size={18} />
               <input
                 type="color"
                 onChange={(e) =>
@@ -371,7 +406,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         return (
           <span key="backgroundColor" className="rte-builder-toolbar-color">
             <label title="Background Color">
-              ⬛
+              <Highlighter size={18} />
               <input
                 type="color"
                 onChange={(e) =>
@@ -395,7 +430,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive({ textAlign: "left" })}
             title="Align Left"
           >
-            ⬅
+            <AlignLeft size={18} />
           </ToolbarButton>
         );
 
@@ -407,7 +442,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive({ textAlign: "center" })}
             title="Align Center"
           >
-            ↔
+            <AlignCenter size={18} />
           </ToolbarButton>
         );
 
@@ -419,7 +454,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive({ textAlign: "right" })}
             title="Align Right"
           >
-            ➡
+            <AlignRight size={18} />
           </ToolbarButton>
         );
 
@@ -431,7 +466,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive({ textAlign: "justify" })}
             title="Justify"
           >
-            ⬌
+            <AlignJustify size={18} />
           </ToolbarButton>
         );
 
@@ -442,7 +477,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             onClick={() => editor.chain().focus().indent().run()}
             title="Indent (Tab)"
           >
-            →|
+            <Indent size={18} />
           </ToolbarButton>
         );
 
@@ -453,7 +488,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             onClick={() => editor.chain().focus().outdent().run()}
             title="Outdent (Shift+Tab)"
           >
-            |←
+            <Outdent size={18} />
           </ToolbarButton>
         );
 
@@ -465,7 +500,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("bulletList")}
             title="Bullet List"
           >
-            •
+            <List size={18} />
           </ToolbarButton>
         );
 
@@ -477,7 +512,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("orderedList")}
             title="Numbered List"
           >
-            1.
+            <ListOrdered size={18} />
           </ToolbarButton>
         );
 
@@ -503,7 +538,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("heading", { level })}
             title={`Heading ${level}`}
           >
-            H{level}
+            <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+              <Heading size={18} />
+              <span style={{ fontSize: "11px", fontWeight: "bold" }}>{level}</span>
+            </span>
           </ToolbarButton>
         );
 
@@ -515,7 +553,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("blockquote")}
             title="Blockquote"
           >
-            "
+            <Quote size={18} />
           </ToolbarButton>
         );
 
@@ -526,7 +564,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
             title="Horizontal Rule"
           >
-            ―
+            <Minus size={18} />
           </ToolbarButton>
         );
 
@@ -543,7 +581,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("link")}
             title="Insert Link"
           >
-            🔗
+            <Link size={18} />
           </ToolbarButton>
         );
 
@@ -555,7 +593,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             disabled={!editor.isActive("link")}
             title="Remove Link"
           >
-            🔗✕
+            <Unlink size={18} />
           </ToolbarButton>
         );
 
@@ -575,7 +613,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             }}
             title="Insert Image"
           >
-            🖼️
+            <Image size={18} />
           </ToolbarButton>
         );
 
@@ -595,7 +633,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             }}
             title="Insert Video"
           >
-            🎥
+            <Video size={18} />
           </ToolbarButton>
         );
 
@@ -612,7 +650,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             }
             title="Insert Table"
           >
-            ⊞
+            <Table size={18} />
           </ToolbarButton>
         );
 
@@ -625,7 +663,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
               active={showEmojiPicker}
               title="Insert Emoji"
             >
-              😀
+              <Smile size={18} />
             </ToolbarButton>
             {showEmojiPicker && (
               <EmojiPicker
@@ -651,7 +689,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 : "Fullscreen (Ctrl+Shift+F)"
             }
           >
-            {isFullscreen ? "⊗" : "⛶"}
+            {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
           </ToolbarButton>
         );
 
@@ -662,7 +700,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             onClick={() => editor.chain().focus().print().run()}
             title="Print (Ctrl+P)"
           >
-            🖨️
+            <Printer size={18} />
           </ToolbarButton>
         );
 
@@ -674,7 +712,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             disabled={!editor.can().undo()}
             title="Undo (Ctrl+Z)"
           >
-            ↶
+            <Undo size={18} />
           </ToolbarButton>
         );
 
@@ -686,7 +724,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             disabled={!editor.can().redo()}
             title="Redo (Ctrl+Y)"
           >
-            ↷
+            <Redo size={18} />
           </ToolbarButton>
         );
 

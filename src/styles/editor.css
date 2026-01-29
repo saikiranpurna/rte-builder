@@ -196,6 +196,39 @@
   height: 0;
 }
 
+/* Color Preset Group */
+.rte-builder-toolbar-color-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+}
+
+.rte-builder-color-preset {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.rte-builder-color-preset:hover {
+  transform: scale(1.15);
+  border-color: #9ca3af;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rte-builder-color-preset:active {
+  transform: scale(1.05);
+}
+
+.rte-builder-color-preset-bg {
+  border-style: dashed;
+}
+
 /* Editor Container */
 .rte-builder-container {
   overflow-y: auto;
@@ -207,7 +240,9 @@
 .rte-builder-content {
   padding: 16px;
   outline: none;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: #1f2937;
@@ -311,7 +346,7 @@
   color: #e11d48;
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 0.9em;
 }
 
