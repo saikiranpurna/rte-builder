@@ -8,7 +8,6 @@ import {
   Underline,
   Strikethrough,
   Code,
-  FileCode,
   Subscript,
   Superscript,
   RemoveFormatting,
@@ -36,6 +35,7 @@ import {
   Printer,
   Undo,
   Redo,
+  CodeXml,
 } from "lucide-react";
 
 interface ToolbarProps {
@@ -84,26 +84,26 @@ const LINE_HEIGHTS = [
   { value: "3", label: "Triple" },
 ];
 
-const CODE_LANGUAGES = [
-  { value: "javascript", label: "JavaScript" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "python", label: "Python" },
-  { value: "java", label: "Java" },
-  { value: "cpp", label: "C++" },
-  { value: "csharp", label: "C#" },
-  { value: "php", label: "PHP" },
-  { value: "ruby", label: "Ruby" },
-  { value: "go", label: "Go" },
-  { value: "rust", label: "Rust" },
-  { value: "html", label: "HTML" },
-  { value: "css", label: "CSS" },
-  { value: "sql", label: "SQL" },
-  { value: "bash", label: "Bash" },
-  { value: "json", label: "JSON" },
-  { value: "yaml", label: "YAML" },
-  { value: "markdown", label: "Markdown" },
-  { value: "xml", label: "XML" },
-];
+// const CODE_LANGUAGES = [
+//   { value: "javascript", label: "JavaScript" },
+//   { value: "typescript", label: "TypeScript" },
+//   { value: "python", label: "Python" },
+//   { value: "java", label: "Java" },
+//   { value: "cpp", label: "C++" },
+//   { value: "csharp", label: "C#" },
+//   { value: "php", label: "PHP" },
+//   { value: "ruby", label: "Ruby" },
+//   { value: "go", label: "Go" },
+//   { value: "rust", label: "Rust" },
+//   { value: "html", label: "HTML" },
+//   { value: "css", label: "CSS" },
+//   { value: "sql", label: "SQL" },
+//   { value: "bash", label: "Bash" },
+//   { value: "json", label: "JSON" },
+//   { value: "yaml", label: "YAML" },
+//   { value: "markdown", label: "Markdown" },
+//   { value: "xml", label: "XML" },
+// ];
 
 // Emoji Picker Popover Component
 const EmojiPicker: React.FC<{
@@ -271,7 +271,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
             active={editor.isActive("codeBlock")}
             title="Code Block"
           >
-            <FileCode size={18} />
+            <CodeXml size={18} />
           </ToolbarButton>
         );
 
@@ -540,7 +540,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           >
             <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
               <Heading size={18} />
-              <span style={{ fontSize: "11px", fontWeight: "bold" }}>{level}</span>
+              <span style={{ fontSize: "11px", fontWeight: "bold" }}>
+                {level}
+              </span>
             </span>
           </ToolbarButton>
         );

@@ -1,6 +1,6 @@
 {
   "name": "rte-builder",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A universal Rich Text Editor for React supporting multiple backends (TipTap, Slate, Lexical) with a unified API, full toolbar customization, and zero licensing costs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

@@ -8,6 +8,7 @@ import React, { useState, useRef, useEffect } from "react";
 import type { Editor } from "@tiptap/react";
 import type { ToolbarButtonType } from "../../core/types";
 import { EMOJI_CATEGORIES } from "../../extensions/Emoji";
+import { CodeXml } from "lucide-react";
 
 interface TipTapToolbarProps {
   editor: Editor | null;
@@ -241,20 +242,7 @@ export const TipTapToolbar: React.FC<TipTapToolbarProps> = ({
             active={editor.isActive("codeBlock")}
             title="Code Block"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <polyline points="9 8 5 12 9 16"></polyline>
-              <polyline points="15 8 19 12 15 16"></polyline>
-            </svg>
+            <CodeXml size={18} />
           </ToolbarButton>
         );
 
