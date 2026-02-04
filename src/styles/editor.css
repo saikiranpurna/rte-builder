@@ -730,6 +730,17 @@
   min-width: 100px;
 }
 
+/* ===== Source Mode (Code Block Active) - Disable all controls except code block ===== */
+.rte-builder-toolbar.rte-builder-toolbar-source-mode .rte-builder-toolbar-btn:not(.active),
+.rte-builder-toolbar.rte-builder-toolbar-source-mode .rte-builder-toolbar-select,
+.rte-builder-toolbar.rte-builder-toolbar-source-mode .rte-builder-toolbar-color,
+.rte-builder-toolbar.rte-builder-toolbar-source-mode .rte-builder-toolbar-color-group,
+.rte-builder-toolbar.rte-builder-toolbar-source-mode .rte-builder-toolbar-separator {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 /* ===== Indentation Styles ===== */
 .rte-builder-content [style*="margin-left"] {
   transition: margin-left 0.15s ease;

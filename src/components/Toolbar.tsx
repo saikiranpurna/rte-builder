@@ -192,7 +192,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     <button
       ref={buttonRef}
       type="button"
-      onClick={onClick}
+      onMouseDown={(e) => {
+        e.preventDefault(); // Prevent editor from losing focus
+        onClick();
+      }}
       disabled={disabled}
       title={title}
       className={`rte-builder-toolbar-btn ${active ? "active" : ""} ${disabled ? "disabled" : ""}`}
@@ -267,9 +270,53 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         return (
           <ToolbarButton
             key="codeBlock"
-            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            onClick={() => {
+              if (editor.isActive("codeBlock")) {
+                // Source mode OFF: extract raw HTML from code block, render as rich content
+                let htmlSource = "";
+                editor.state.doc.descendants((node) => {
+                  if (node.type.name === "codeBlock") {
+                    htmlSource = node.textContent;
+                    return false;
+                  }
+                });
+
+                htmlSource = htmlSource.trim();
+
+                if (htmlSource) {
+                  editor.commands.setContent(htmlSource, true, {
+                    preserveWhitespace: false,
+                  });
+                } else {
+                  editor.commands.clearContent(true);
+                }
+                editor.commands.focus();
+              } else {
+                // Source mode ON: get current rich content as HTML, show as editable source
+                const currentHTML = editor.getHTML();
+                const isEmptyContent =
+                  !currentHTML ||
+                  currentHTML === "<p></p>" ||
+                  currentHTML.trim() === "";
+
+                const codeBlockContent = isEmptyContent
+                  ? { type: "doc", content: [{ type: "codeBlock" }] }
+                  : {
+                      type: "doc",
+                      content: [
+                        {
+                          type: "codeBlock",
+                          content: [{ type: "text", text: currentHTML }],
+                        },
+                      ],
+                    };
+
+                editor.commands.setContent(codeBlockContent, false);
+                editor.commands.focus();
+              }
+            }}
             active={editor.isActive("codeBlock")}
-            title="Code Block"
+            title="Code Block (HTML Source)"
           >
             <CodeXml size={18} />
           </ToolbarButton>
@@ -740,5 +787,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({
     }
   };
 
-  return <div className="rte-builder-toolbar">{buttons.map(renderButton)}</div>;
+  const isSourceMode = editor.isActive("codeBlock");
+
+  return <div className={`rte-builder-toolbar${isSourceMode ? " rte-builder-toolbar-source-mode" : ""}`}>{buttons.map(renderButton)}</div>;
 };
