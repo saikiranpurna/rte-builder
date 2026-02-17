@@ -435,17 +435,26 @@ export const Toolbar: React.FC<ToolbarProps> = ({
 
       case "textColor":
         return (
-          <span key="textColor" className="rte-builder-toolbar-color">
-            <label title="Text Color">
-              <Type size={18} />
-              <input
-                type="color"
-                onChange={(e) =>
-                  editor.chain().focus().setColor(e.target.value).run()
-                }
-                value={editor.getAttributes("textStyle").color || "#000000"}
-              />
-            </label>
+          <span key="textColor" className="rte-builder-toolbar-color-group">
+            <button
+              key="text-none"
+              className="rte-builder-color-preset rte-builder-color-preset-none"
+              onClick={() => editor.chain().focus().unsetColor().run()}
+              title="Text Color: None (Reset)"
+              type="button"
+            />
+            <span className="rte-builder-toolbar-color">
+              <label title="Text Color">
+                <Type size={18} />
+                <input
+                  type="color"
+                  onChange={(e) =>
+                    editor.chain().focus().setColor(e.target.value).run()
+                  }
+                  value={editor.getAttributes("textStyle").color || "#000000"}
+                />
+              </label>
+            </span>
           </span>
         );
 

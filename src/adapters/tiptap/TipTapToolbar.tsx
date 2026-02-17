@@ -416,6 +416,13 @@ export const TipTapToolbar: React.FC<TipTapToolbarProps> = ({
         const textPresetColors = ["#11a161", "#85144b", "#ff851b", "#b10dc9"];
         return (
           <span key="textColor" className="rte-builder-toolbar-color-group">
+            <button
+              key="text-none"
+              className="rte-builder-color-preset rte-builder-color-preset-none"
+              onClick={() => editor.chain().focus().unsetColor().run()}
+              title="Text Color: None (Reset)"
+              type="button"
+            />
             {textPresetColors.map((color) => (
               <button
                 key={`text-${color}`}

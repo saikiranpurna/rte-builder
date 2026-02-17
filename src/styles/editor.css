@@ -229,6 +229,24 @@
   border-style: dashed;
 }
 
+/* None/Reset color preset */
+.rte-builder-color-preset-none {
+  background: #ffffff !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.rte-builder-color-preset-none::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -2px;
+  right: -2px;
+  height: 2px;
+  background: #ef4444;
+  transform: rotate(-45deg);
+}
+
 /* Editor Container */
 .rte-builder-container {
   overflow-y: auto;
@@ -323,7 +341,25 @@
   list-style-type: decimal;
 }
 
+/* Nested list styles */
+.rte-builder-content ul ul {
+  list-style-type: circle;
+}
+
+.rte-builder-content ul ul ul {
+  list-style-type: square;
+}
+
+.rte-builder-content ol ol {
+  list-style-type: lower-alpha;
+}
+
+.rte-builder-content ol ol ol {
+  list-style-type: lower-roman;
+}
+
 .rte-builder-content li {
+  display: list-item;
   margin: 0.25em 0;
 }
 

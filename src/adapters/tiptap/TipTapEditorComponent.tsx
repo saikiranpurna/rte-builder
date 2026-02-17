@@ -179,6 +179,29 @@ export const TipTapEditorComponent = forwardRef<
           class: "rte-builder-content",
           style: `min-height: ${minHeight}px; ${maxHeight ? `max-height: ${maxHeight}px;` : ""}`,
         },
+        transformPastedHTML(html) {
+          return html
+            // Remove excessive line breaks (3+ consecutive <br>)
+            .replace(/(<br\s*\/?>\s*){3,}/gi, "<br><br>")
+            // Collapse multiple blank paragraphs into one
+            .replace(/(<p>\s*<\/p>\s*){2,}/gi, "<p></p>")
+            // Remove excessive whitespace between tags
+            .replace(/>\s{2,}</g, "> <")
+            // Normalize multiple &nbsp; sequences to single space
+            .replace(/(&nbsp;\s*){2,}/g, "&nbsp;")
+            // Remove zero-width spaces and other invisible chars
+            .replace(/[\u200B\u200C\u200D\uFEFF]/g, "")
+            // Clean up pasted inline styles that cause spacing issues
+            .replace(
+              /style="[^"]*"/gi,
+              (match) =>
+                match
+                  .replace(/margin(-top|-bottom):\s*[\d.]+(px|em|rem|pt)\s*;?/gi, "")
+                  .replace(/padding(-top|-bottom):\s*[\d.]+(px|em|rem|pt)\s*;?/gi, "")
+                  .replace(/line-height:\s*[\d.]+(px|em|rem|pt|%)?\s*;?/gi, "")
+                  .replace(/style="\s*"/gi, ""),
+            );
+        },
       },
       ...editorConfig,
     });

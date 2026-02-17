@@ -124,8 +124,20 @@ export const Indent = Extension.create<IndentOptions>({
 
   addKeyboardShortcuts() {
     return {
-      Tab: () => this.editor.commands.indent(),
-      'Shift-Tab': () => this.editor.commands.outdent(),
+      Tab: () => {
+        // If inside a list, let TipTap's built-in list sink handle it
+        if (this.editor.isActive('listItem')) {
+          return false
+        }
+        return this.editor.commands.indent()
+      },
+      'Shift-Tab': () => {
+        // If inside a list, let TipTap's built-in list lift handle it
+        if (this.editor.isActive('listItem')) {
+          return false
+        }
+        return this.editor.commands.outdent()
+      },
     }
   },
 })
