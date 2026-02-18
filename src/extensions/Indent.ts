@@ -11,11 +11,11 @@ declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     indent: {
       /**
-       * Indent the current block
+       * Indent the current block (or sink list item if inside a list)
        */
       indent: () => ReturnType
       /**
-       * Outdent the current block
+       * Outdent the current block (or lift list item if inside a list)
        */
       outdent: () => ReturnType
     }
@@ -70,7 +70,12 @@ export const Indent = Extension.create<IndentOptions>({
     return {
       indent:
         () =>
-        ({ tr, state, dispatch }) => {
+        ({ tr, state, dispatch, editor }) => {
+          // If inside a list item, sink it to create a sub-list
+          if (editor.isActive('listItem')) {
+            return editor.chain().sinkListItem('listItem').run()
+          }
+
           const { selection } = state
           const { from, to } = selection
 
@@ -96,7 +101,12 @@ export const Indent = Extension.create<IndentOptions>({
 
       outdent:
         () =>
-        ({ tr, state, dispatch }) => {
+        ({ tr, state, dispatch, editor }) => {
+          // If inside a list item, lift it out of a sub-list
+          if (editor.isActive('listItem')) {
+            return editor.chain().liftListItem('listItem').run()
+          }
+
           const { selection } = state
           const { from, to } = selection
 
@@ -125,16 +135,16 @@ export const Indent = Extension.create<IndentOptions>({
   addKeyboardShortcuts() {
     return {
       Tab: () => {
-        // If inside a list, let TipTap's built-in list sink handle it
+        // If inside a list, sink the list item to create a sub-list
         if (this.editor.isActive('listItem')) {
-          return false
+          return this.editor.commands.sinkListItem('listItem')
         }
         return this.editor.commands.indent()
       },
       'Shift-Tab': () => {
-        // If inside a list, let TipTap's built-in list lift handle it
+        // If inside a list, lift the list item out of a sub-list
         if (this.editor.isActive('listItem')) {
-          return false
+          return this.editor.commands.liftListItem('listItem')
         }
         return this.editor.commands.outdent()
       },
