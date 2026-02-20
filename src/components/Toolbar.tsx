@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import type { Editor } from "@tiptap/react";
 import type { ToolbarButton } from "../types";
 import { EMOJI_CATEGORIES } from "../extensions/Emoji";
+import { formatHtml } from "../utils/formatHtml";
 import {
   Bold,
   Italic,
@@ -292,12 +293,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                 }
                 editor.commands.focus();
               } else {
-                // Source mode ON: get current rich content as HTML, show as editable source
+                // Source mode ON: get current rich content as HTML, format and show as editable source
                 const currentHTML = editor.getHTML();
                 const isEmptyContent =
                   !currentHTML ||
                   currentHTML === "<p></p>" ||
                   currentHTML.trim() === "";
+
+                const formattedHTML = isEmptyContent
+                  ? ""
+                  : formatHtml(currentHTML);
 
                 const codeBlockContent = isEmptyContent
                   ? { type: "doc", content: [{ type: "codeBlock" }] }
@@ -306,7 +311,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({
                       content: [
                         {
                           type: "codeBlock",
-                          content: [{ type: "text", text: currentHTML }],
+                          content: [
+                            { type: "text", text: formattedHTML },
+                          ],
                         },
                       ],
                     };

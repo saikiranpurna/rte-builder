@@ -8,6 +8,7 @@ import React, { useState, useRef, useEffect } from "react";
 import type { Editor } from "@tiptap/react";
 import type { ToolbarButtonType } from "../../core/types";
 import { EMOJI_CATEGORIES } from "../../extensions/Emoji";
+import { formatHtml } from "../../utils/formatHtml";
 import { CodeXml } from "lucide-react";
 
 interface TipTapToolbarProps {
@@ -271,6 +272,10 @@ export const TipTapToolbar: React.FC<TipTapToolbarProps> = ({
                   currentHTML === "<p></p>" ||
                   currentHTML.trim() === "";
 
+                const formattedHTML = isEmptyContent
+                  ? ""
+                  : formatHtml(currentHTML);
+
                 const codeBlockContent = isEmptyContent
                   ? { type: "doc", content: [{ type: "codeBlock" }] }
                   : {
@@ -278,7 +283,7 @@ export const TipTapToolbar: React.FC<TipTapToolbarProps> = ({
                       content: [
                         {
                           type: "codeBlock",
-                          content: [{ type: "text", text: currentHTML }],
+                          content: [{ type: "text", text: formattedHTML }],
                         },
                       ],
                     };
