@@ -23,7 +23,7 @@ import { ListItem } from "@tiptap/extension-list-item";
 import { Blockquote } from "@tiptap/extension-blockquote";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
-import { Image } from "@tiptap/extension-image";
+import { AlignableImage } from "../extensions/AlignableImage";
 import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableCell } from "@tiptap/extension-table-cell";
@@ -229,7 +229,7 @@ export const RichTextEditor = forwardRef<EditorRef, EditorProps>(
             rel: "noopener noreferrer",
           },
         }),
-        Image.configure({
+        AlignableImage.configure({
           inline: false,
           allowBase64: true,
         }),

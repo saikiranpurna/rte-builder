@@ -30,7 +30,6 @@ import { ListItem } from "@tiptap/extension-list-item";
 import { Blockquote } from "@tiptap/extension-blockquote";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
 import { Link } from "@tiptap/extension-link";
-import { Image } from "@tiptap/extension-image";
 import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableCell } from "@tiptap/extension-table-cell";
@@ -51,6 +50,7 @@ import { Emoji } from "../../extensions/Emoji";
 import { Fullscreen } from "../../extensions/Fullscreen";
 import { Print } from "../../extensions/Print";
 import { Indent } from "../../extensions/Indent";
+import { AlignableImage } from "../../extensions/AlignableImage";
 
 // Toolbar
 import { TipTapToolbar } from "./TipTapToolbar";
@@ -136,7 +136,7 @@ export const TipTapEditorComponent = forwardRef<
             rel: "noopener noreferrer",
           },
         }),
-        Image.configure({
+        AlignableImage.configure({
           inline: false,
           allowBase64: true,
         }),
